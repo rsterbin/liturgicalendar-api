@@ -1,24 +1,27 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var support = require('@rsterbin/express-api-support');
-
-var apiRouter = require('./routes/api');
-
 require('dotenv').config();
 
-var app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const support = require('@rsterbin/express-api-support');
+
+const apiRouter = require('./routes/api');
+const configSpec = require('./config.json');
+
+const app = express();
 
 // API support
 support.init(['cors', 'react'], {
-    system: { apiUrlPrefix: '/api/v1' },
-});
+  system: { apiUrlPrefix: '/api/v1' },
+  lc: { sqs: {} }
+}, configSpec);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.set('support', support);
 
 // express setup
 if (support.getContext('system').setting('environment') !== 'production') {

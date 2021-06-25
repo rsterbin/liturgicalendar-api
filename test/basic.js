@@ -7,7 +7,7 @@ const ORIGIN = 'http://localhost:3000';
 
 describe('Basic tests for the LiturgiCalendar API', () => {
 
-  it('if the proper origin is set, it should return the API description at the API root', async function () {
+  it('should return the API description at the API root if the proper origin is set', async function () {
 
     const res = await request(app).get('/api/v1/').set('Origin', ORIGIN).send({});
 
@@ -17,7 +17,7 @@ describe('Basic tests for the LiturgiCalendar API', () => {
 
   });
 
-  it('if the proper origin is not set, it should return an auth error', async function () {
+  it('should return an auth error if the proper origin is not set', async function () {
 
     const res = await request(app).get('/api/v1/').set('Origin', ORIGIN + 'xx').send({});
 
@@ -26,6 +26,25 @@ describe('Basic tests for the LiturgiCalendar API', () => {
     chai.expect(res.body.code).to.be.eql('CORS_AUTH_FAILED');
     chai.expect(res.body).to.have.property('msg');
     chai.expect(res.body.msg).to.be.eql('Access is restricted');
+
+  });
+
+  it('should have access to its config variables', async function () {
+
+    app.use('/api/fake-endpoint', function(req, res) {
+      res.status(200).json({ code: 'SUCCESS', msg: 'This route does nothing', data: {
+        calc: {
+          url: app.setting('support').getContext('config').get('lc.calcRequestUrl'),
+          region: app.setting('support').getContext('config').get('lc.sqs.region'),
+        }
+      }});
+    });
+
+    const res = await request(app).get('/api/v1/').set('Origin', ORIGIN).send({});
+
+    chai.expect(res.status).to.be.eql(200);
+    chai.expect(res.body).to.have.property('msg');
+    chai.expect(res.body.msg).to.be.eql('This is version 1.0 of the LiturgiCalendar API');
 
   });
 

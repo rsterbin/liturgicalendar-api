@@ -1,0 +1,38 @@
+{
+  "lc": {
+    "required": true,
+    "type": "parent",
+    "children": {
+      "sqs": {
+        "required": true,
+        "type": "parent",
+        "children": {
+          "accessKeyId": {
+            "required": true,
+            "type": "string",
+            "from_env": "AWS_ACCESS_KEY_ID",
+            "description": "AWS access key ID used for connecting to SQS"
+          },
+          "secretAccessKey": {
+            "required": true,
+            "type": "string",
+            "from_env": "AWS_SECRET_ACCESS_KEY",
+            "description": "AWS secret access key used for connecting to SQS"
+          },
+          "region": {
+            "required": true,
+            "type": "string",
+            "from_env": "AWS_REGION",
+            "description": "AWS region used for connecting to SQS"
+          }
+        }
+      },
+      "calcRequestUrl": {
+        "required": true,
+        "type": "string",
+        "from_env": "AWS_SQS_CALC_REQUEST_URL",
+        "description": "SQS URL to send calculation requests"
+      }
+    }
+  }
+}
