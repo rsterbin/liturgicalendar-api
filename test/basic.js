@@ -48,5 +48,9 @@ describe('Basic tests for the LiturgiCalendar API', () => {
 
   });
 
+  // TODO -- we can set these up once I've got a database and my calc scripts are running again
+  it('should return a waiting message when data needs to be calculated');
+  it('should return the requested data when ready');
+
 });
 
